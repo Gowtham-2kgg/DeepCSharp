@@ -39,7 +39,7 @@ public class ExampleOfEverloading {
     //Explicit and Implicit operator overloading - both defined below
     public static implicit operator ExampleOfEverloading(int a) { return new ExampleOfEverloading(a, a); }
     public static explicit operator int(ExampleOfEverloading a) { return a.x; }
-
+    public delegate int Adding(int a, int b);
 
     public void otherOperators(ExampleOfEverloading a, ExampleOfEverloading b) {
 
@@ -57,13 +57,18 @@ public class ExampleOfEverloading {
         int leftShift = 10 << 2;
         int ri8Shift = 10 >> 2;
 
-        var lambdaExample = Enumerable.Range(1, 10).Max(x => x >> 2); 
+        var lambdaExample = Enumerable.Range(1, 10).Max(x => x >> 2);
 
+        Adding adding = (hj, jh) => { return hj + jh; };
+        var deleExample=adding(12, 43);
+        int? nullableInt = a?.x; //can be also used for indexing
 
+        nullableInt++;
+        ++nullableInt;
 
-
+        Console.WriteLine(typeof(int) + " " + nameof(nullableInt));
+        Console.WriteLine("AgregateObject".ToCharArray()[0]);
 
     }
 }
 
-}
