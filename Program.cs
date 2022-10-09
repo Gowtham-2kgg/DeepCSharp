@@ -1,7 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Data.Common;
+using System.Dynamic;
 using System.Globalization;
+using System.Numerics;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -233,9 +236,195 @@ public class StringOperationsAndFeatures
     }
 }
 public class ArrayEx {
-    public void Example() { 
-    
+    public void Example() {
+        int[] arr = new int[4] { 12,43,54,5};
+        int[] ar = { 12, 43, 23, 43 };
+        int[] arrr = new int[10];
+
+        int[] arrReapeat = Enumerable.Repeat(12, 4).ToArray();
+        var copyArray=new int[4];
+
+        Array.Copy(arrReapeat, copyArray, 4);
+
+        var arrt = arrReapeat.Clone();
+
+        arrReapeat.CopyTo(copyArray,0);
+
+        arrReapeat.SequenceEqual(copyArray);
+
+        int[][] jaggedArray = new int[5][];
+        for (int i= 0; i < 5; i++) {
+            jaggedArray[i] = new int[12];
+        }
 
     }
 
+}
+public class EnumExample
+{
+    public enum Bytes : byte
+{
+    Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+}
+    //we ca also use it as flags
+    [Flags]
+    public enum Longs : long { 
+    january=1>>2,febraury=10,March=24,April,Default=january
+    }
+    [Flags]
+    public enum uInt : uint
+    {
+        [Description("Just for one time")]january = 1 >> 2,[Description("You are dead")] febraury = 10, March = 24, April, Default = january
+    }
+    Longs value = (Longs)20;
+    Longs t;
+    public void Example() {
+        var t1 = Enum.GetNames(typeof(Longs));
+        var t2 = Enum.GetName(typeof(Longs),10);
+
+        uInt result;
+        var t3 = Enum.TryParse("january",out result);
+    
+    }
+
+
+
+}
+public class Tuples {
+
+    public void TuplesExample() {
+        var tuple1 = new Tuple<string, int, int, string>("foo",12,43,"too");
+        var tuple2 = ("foo",12,43,"too");
+        var tuple3 = Tuple.Create("foo",12,43,"too");
+
+        //we can have tuple in List too
+
+        //Guid
+        var t = Guid.Empty;
+        t=Guid.NewGuid();
+
+        //Biginterger
+        BigInteger big = new BigInteger(1222222);
+        big = big + 123;
+        
+    }
+
+}
+public class Collections {
+
+    public void IntroExample() {
+        List<int> list = new List<int>();
+        Dictionary<int, int> dic = new Dictionary<int,int>();
+        HashSet<string> b = new HashSet<string>();
+        //queue stack soretedset more an dmore are there
+        
+    
+    }
+}
+internal class Looping {
+
+    public void Example() {
+        for (int aaa = 0; aaa < 10; aaa += 2) {
+            //
+        }
+        for (; true;) {
+            //
+        }
+        while (true) { }
+        do { } while (true);
+        List<int> a = Enumerable.Range(0, 10).ToList();
+        a.ForEach(x => { });
+        foreach (var t in a) { }
+        for (; ; ) { for (; ; ) { continue; } break; }
+
+        List<int> aa = Enumerable.Range(1, 10).ToList();
+
+        IEnumerable<int> Iter = aa.AsEnumerable();
+
+        //it will hasve hasnext and crrent
+
+
+
+    }
+    public IEnumerable<int> YieldExample() {
+
+        for (int i = 0; i < 10; i++) {
+            yield return i;
+        }
+    }
+    public void ValueTypeVsRefType() {
+        // all the obj are ref and all variables are value
+        int a = 10;
+
+        //dffernce between out and ref is in ref value is preserved in out just variablee iss declared
+
+    }
+    public void ChangeValue(int a) { a = 10; }//will not chnage value
+    public void ChangeValueRef(ref int a) { a = 111; }//will change value
+    public void ChangeValueOut(out int a) { a = 14323; }//will change value
+
+    public void BoxedValueExample() {
+        //value iside object is called boxed value
+        object i = (int)10;//boxed
+        object j = (int)10;
+        long t = (long)i;//will gives an error
+        long tt = (long)(int)i;
+        var comp = i == j;//false
+        comp = i.Equals(j);//true
+
+        //Alias names
+        //like 
+        System.Int32 a = 100;
+        System.UInt16 a1 = 100;
+        System.UInt32 a2 = 100;
+        System.UInt64 a3 = 100;
+        System.Int64 a4 = 100;
+        System.Int16 a5 = 100;
+        System.Char a6 = '1';
+        System.String a7 = "100";
+        System.Boolean a8 = true;
+        //and there are many
+    }
+
+    public void AnonymousTypes() {
+        var t = new { value = 10 };
+        var y = new { foo = 10, Bar = 12 };
+        var y2 = new { foo = 1, Bar = 122 };
+        var y3 = new { foo = 110, Bar = 1122 };
+        var y4= new { foo = 120, Bar = 1122 };
+        var comp = y2.Equals(y);
+
+        var list = new[] { y, y2 };
+        var ty = new[] { new { value = 120 }, new { value = 091 } };
+
+    
+    }
+    public void DynamicTypes() {
+        dynamic info = new ExpandoObject();
+        info.Id = 12;
+        info.Gowtham = 12;
+        dynamic foo = 123;
+
+    
+    }
+
+    public void TypeConversion() {
+        //explicit
+        Double d = 100.999;
+        int a = (int)d;
+        if (a is int) { IEnumerable<int> aaa = Enumerable.Repeat(10, 2).AsEnumerable();
+            aaa.OfType<int>();
+            aaa.Cast<int>();
+        }
+        //implicit
+        long aa = a;
+        //nullable types
+        int? nullableRi8 = null;
+        var t=nullableRi8.HasValue;
+       
+        var tt = nullableRi8.GetValueOrDefault(0);
+        //var rt = Nullable.GetUnderlyingType(typeof(nullableRi8));
+
+    
+    }
 }
