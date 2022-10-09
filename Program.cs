@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Common;
 using System.Dynamic;
 using System.Globalization;
 using System.Numerics;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -426,5 +428,92 @@ internal class Looping {
         //var rt = Nullable.GetUnderlyingType(typeof(nullableRi8));
 
     
+    }
+}
+public class Constructors {
+    public string name { get; set; }
+    static Constructors() { }//will be excecuted only once
+    public Constructors():this("dog") { }//whenever obj is created this will be exe
+    public Constructors(string name) { this.name = name; }
+    ~Constructors() { }
+}
+public class Child<T> : Constructors { //generic
+    public Child() : base() { }
+    ~Child() { }
+    
+}
+
+public static class StaticClass {
+    //everything must be static under static classss
+    public static int a;
+    public static void method() { }
+
+}
+//acees modifiers public protected internal private and protected internal
+
+//partical class can implement from only one base class implementing different will lead to error
+public partial class Partiality:Constructors {
+    public void Method1() { Console.Write("hai"); }
+    public partial void Method2();
+    public partial void Method3();
+
+}
+public partial class Partiality {
+
+    public partial void Method2() {
+        //
+        Console.WriteLine("hello");
+    
+    }
+    public partial void Method3()
+    {
+        //
+        Console.WriteLine("hello");
+
+    }
+}
+public class Methods {
+
+    delegate int ExampleDele(int a);
+
+    ExampleDele Ec = (z) => { return z * 2; };
+
+    public static int ExampleForParams(params int[] a) { return 0; }
+    int c=ExampleForParams(12,32,4324,34,3,2);
+    //Extension methods are by this and static keyword
+    public void NmaedArgumentsAndOptional(int left, int right, [Optional] int h,int y=100) {
+        NmaedArgumentsAndOptional(right:20, left:12,h:10);
+    //once if u use the variable name in paramenter u have to use for all 
+    }
+
+}
+public class DataAnnotation {
+    [Range(0,1000,ErrorMessage ="Reached max")]
+    public int max;
+    [StringLength(maximumLength:1000,MinimumLength =12,ErrorMessage ="Dont do this"),Editable(false)]
+    public string name;
+    [DataType(DataType.Date)]
+    
+    public DateTime date;
+    [NotABrinjal("Brinjals not allowed")]
+    public string veg { get; set; }
+    public void Method() {
+        ValidationContext validationContext = new ValidationContext("sir");//any reference can be added inside theis ()
+        List<ValidationResult> validationResults = new List<ValidationResult>();
+        bool isValid = Validator.TryValidateObject("hai", validationContext, validationResults,true);
+    
+    }
+
+}
+[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
+public class NotABrinjal : ValidationAttribute {
+    public NotABrinjal(string errorMessage) : base(errorMessage)
+    {
+    }
+
+    public override bool IsValid(object? value)
+    {
+        string v = value as string;
+        return !v.ToLower().Contains("brinjal");
     }
 }
