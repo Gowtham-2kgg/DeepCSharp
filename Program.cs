@@ -3,12 +3,21 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Common;
 using System.Dynamic;
 using System.Globalization;
+using System.Net.WebSockets;
 using System.Numerics;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml.Serialization;
+//
+using random = System.Random;
+using static System.Console;
+using math =System.Math;
+using st = System.Text;
+
+
 
 internal class Program
 {
@@ -516,4 +525,126 @@ public class NotABrinjal : ValidationAttribute {
         string v = value as string;
         return !v.ToLower().Contains("brinjal");
     }
+}
+public class KeyWordparent {
+    public virtual void Sign() { }
+}
+public class Keywords:KeyWordparent {
+    public volatile int vol;
+    public override void Sign()
+    {
+        
+    }
+    public static object u = new object();
+    public void Example() {
+       
+        //as
+        var t = (object)10 as int?;
+        var y = "hai" as String;
+    //Goto
+    ExampleForGoto:
+
+        goto ExampleForGoto;
+        //volatile - to prevent modification during multi thread can be used only within struct or class
+        ///uncheccked and checked
+        int a = 100;
+        while (a < 1000000000) {
+            a=unchecked( a + a);//overflow will be ignored
+        }
+        while (a < 100000000000) {
+            a = checked(a + a);//exception will be thrown of overlfow
+        }
+
+        //stackalloc allocate space in stack
+        //byte* stack = stackalloc byte[1000]; -- used in unsafe
+
+        while (true) {
+            if (true) { break; }
+            continue;
+        }
+        //const - value will be cosntant throghout the end starting from compile time(whereas readonly - runtime)
+        const int yt = 12;
+        //for
+        for (; ; );
+        //fixed -can be used inside struct
+
+        //default
+        int yr = default(int);
+        var u = yr is int;
+        Console.Write(typeof(int));
+        Console.WriteLine(yr.GetType() == typeof(int));
+        //foreach
+        //this -used everywhere
+        try { }
+        catch { }
+        finally { //price.Dispose();
+
+            //void means nothing , namespace is file, ref out we know and....
+            //lock (u) { }
+            //
+                }
+
+    }
+    public async Task ExampleForAsync() {
+        await ExampleForAsync();
+    }
+    public extern void External();
+    
+}
+public sealed class Se { }//cant inherit from it
+public abstract class AbsExample{
+    int ten;
+    public abstract void Exam();
+    public  void Exam1() { }
+
+}
+public class InheritAbs : AbsExample {
+    readonly string _read;
+    public void External() { }
+
+    public InheritAbs() {
+        _read = "kill";//only iside cons it can b einitialized
+    }
+public override void Exam() { } 
+}
+// T and V are used in Generics
+public class Generics<T> where T:InheritAbs,new()
+{
+    public void Example<T1, T2>() { }
+    public async Task<(V1, V2)> Exampleone<V1, V2>() {
+        return ((V1)(object)1, (V2)(object)2);
+    }
+}
+//CREATE A TYPE WITH EMPTY CONSTRUCTOR
+public class foo
+{ public foo(){ } }
+public class bar {
+    public bar(int a) { }
+}
+//have to call a new for using new
+public class Createtype<T> where T:new(){
+
+    public T create() { 
+    return new T();
+    }
+}
+public interface Interface1 { }
+public interface Interface2 { }
+public interface Interface3 { }
+public class class1 { }
+
+public class class2<T> where T:class1,Interface1,Interface2,new() {
+
+        public void M() {
+        var comparer = EqualityComparer<T>.Default;
+    }
+}
+//reflection
+public class ReflectionSample<T>{
+    public string Example() {
+        return typeof(T).Name;
+    }
+    delegate T Func<out T>();
+    delegate void Action<in T>();
+    delegate T Func2<in T1,out T>();
 }
