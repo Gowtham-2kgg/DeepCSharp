@@ -16,8 +16,11 @@ using random = System.Random;
 using static System.Console;
 using math =System.Math;
 using st = System.Text;
-
-
+using System.Data.SqlTypes;
+using System.Reflection;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.XPath;
 
 internal class Program
 {
@@ -647,4 +650,89 @@ public class ReflectionSample<T>{
     delegate T Func<out T>();
     delegate void Action<in T>();
     delegate T Func2<in T1,out T>();
+}
+//Dispose is used to clear memory of unmanaged resource 
+public class DisposeExmaple : IDisposable {
+    private UnmanagedMemoryStream stream = null;
+    public void Dispose() {
+        stream.Dispose();
+    }
+
+}
+//using will handle
+
+public class ReflecctionExample {
+    public int forGetterAndSetter { get; set; }
+
+    public void Example() {
+
+        var members = typeof(int).GetMembers(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
+        //we can get all members using reflections
+        foreach(var mem in members) {
+            if (mem.DeclaringType.Equals(typeof(int).Name)) { }
+        }
+    }
+    //getting a method using reflection
+    public void MethodInvoke() {
+        var method = "String".GetType().GetMethod("Substring", new[] { typeof(int), typeof(int) });
+        var result = method.Invoke("string", new object[] { 1, 2 });
+        //for static one
+        var statmethod = typeof(Math).GetMethod("Exp");
+        var result1 = statmethod.Invoke(null, new object[] { 1 });// for static function we can pass it as null
+
+        //activator
+        Type type = typeof(BigInteger);
+        var r = Activator.CreateInstance(type);//without value
+        var r1 = Activator.CreateInstance(type,123);///with value
+        var t = Activator.CreateInstance(typeof(int), 123);
+
+        Type geneType = typeof(List<>);
+        Type[] arg = { typeof(string) };
+        var y = geneType.MakeGenericType(arg);
+        var resu = (List<string>)(Activator.CreateInstance(y));
+
+
+        //creating strongly typed delegate
+        var max = typeof(Math).GetMethod("Max", new[] { typeof(int), typeof(int) });
+        var strongDelegate = (Func<int, int, int>)Delegate.CreateDelegate(typeof(Func<int, int, int>), null, max);
+        //Getter
+        var getter = typeof(ReflecctionExample).GetProperty("forGetterAndSetter");
+        var getterIn = getter.GetGetMethod();
+        var getterDele = (Func<ReflecctionExample, int>)Delegate.CreateDelegate(typeof(Func<ReflecctionExample, int>), getterIn);
+
+        //same can be used for settion -we can use action or function
+        var gene = typeof(ReflecctionExample).GetMethod("GetInstance");
+        MethodInfo generic = gene.MakeGenericMethod(typeof(string));
+        generic.Invoke(null, null);
+
+        //PropertyInfo prop = ReflecctionExample.GetType().GetProperty("");
+        //// get the value myInstance.myProperty
+        //object value = prop.GetValue(myInstance);
+        //int newValue = 1;
+        //// set the value myInstance.myProperty to 
+        var linqWithparallel = Enumerable.Range(1, 100).AsParallel().WithDegreeOfParallelism(10).OrderBy(c => c);
+
+    }
+    public T GetInstance<T>()where T : new()
+        {
+        return new T();
+    }
+}
+public class XmlDemo {
+    public void Example() {
+
+        var file = "xmlFile";
+        XmlDocument xmlDocument = new XmlDocument();
+        xmlDocument.Load(file);
+        //creating xml
+        XDocument xDocument = new XDocument(
+        new XElement("Root",new XAttribute("name","value"),new XElement("child","node")));
+
+        XmlNode xmlNode = xmlDocument.SelectSingleNode("node");
+        xmlNode.InnerText ="10";
+        XElement xElement = xDocument.XPathSelectElement("name");
+
+        xmlDocument.Save(file);
+        
+    }
 }
