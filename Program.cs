@@ -736,3 +736,68 @@ public class XmlDemo {
         
     }
 }
+public class CSharpSevenFeatures {
+
+    //Tuples
+    public (int a, int b) ReturnTuple() { return (1, 2); }
+    public void UseTuple() 
+    {
+        var tup = ReturnTuple();
+        int a = tup.a;
+        int b = tup.b;
+        var t = new TUpleDeconstruct { Fn = 10,Ln=12 };
+        var ex = new TupExample((1,2));
+        var (ex1, ex2) = (ex.name.first,ex.name.second);
+
+        var anoTuple = (12, 34);
+        var anoTuple1 = (first:12, second:34);
+        var y = anoTuple.Item1;
+        var ts = anoTuple1.first;
+
+
+         int getThisInt(){ return 1; } //can't be accessed anywhere except this method
+
+        //int (Fn, Ln) = t; Deconstruct
+
+        var tryParsing = int.TryParse("10", out var yr);//we can declare var in parameter of try parse
+
+        //by pattern matching in swich case we can use class
+
+        string aaa = "10" as string;
+        string aa1 = "10" is string?("10"):"1";
+
+        int digitSep = 12_23_23;//new feature
+        //binary literals in enum and we can use throw during terenery operator -new features
+    }
+    public ref int ReturnRef(ref int g) {
+        return ref g;
+    }
+    public ValueTask<int> ReturnValueTask() {
+        return new ValueTask<int>(12);
+
+    }
+    public (int sum, double average) Measure(List<int> items)
+    {
+        var stats = (sum: 0, average: 0d);
+        stats.sum = items.Sum();
+        stats.average = items.Average();
+        return stats;
+        
+    }
+    public class TUpleDeconstruct {
+       
+    public int Fn { get; set; }
+    public int Ln { get; set; }
+        public void Deconstuct(ref int fn, ref int ln) {
+            this.Fn = fn;
+           this. Ln = ln;
+        }
+    }
+    public class TupExample {
+        public (int first, int second) name { get; }
+        public TupExample((int first, int second) name){
+            this.name = name;
+}
+    }
+}
+//C# 3.0 have var, linq,anonymous types lambda expression C#4 got optional and reference and dynamic as newly included features c#5 got async and awit c#5 includes string interpolation ? and many such
