@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Timers;
 using System.Xml.Serialization;
 
 //
@@ -26,6 +27,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Net;
 using System.Net.Sockets;
+using Timer = System.Timers.Timer;
 #if True
 #elif False
 #else
@@ -1010,5 +1012,61 @@ public class HttpExample {
         using (var resp = httpWebRequest.GetResponse()) { 
         }
     
+    }
+}
+
+//polymorphism and immutable
+public class IndexersExample {
+    public string[] citiers = { "berli", "delhi", "Chennai" };
+    public string this[int index] {
+        get { return citiers[index]; }
+        set { citiers[index] = value; }
+    }
+    public void Example() {
+        var foo = new IndexersExample();
+        foo[1] = "Pune";
+
+    }
+
+    public void StreamExample() {
+        Stopwatch stopwatch = Stopwatch.StartNew();
+        Timer timer = new Timer();
+        timer.Start();
+        timer.Stop();
+        FileStream file = new FileStream("path", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        MemoryStream memory = new MemoryStream();
+        StreamReader sR = new StreamReader(memory);
+        StreamWriter sW = new StreamWriter(memory);
+        stopwatch.Stop();
+        Console.WriteLine(stopwatch.Elapsed);
+
+
+    }
+}
+public class CustomEvent : EventArgs { 
+    public int newPrice { get; set; }
+    public int oldPrice { get; set; }
+public CustomEvent(int oldPrice,int  newPrice){
+        this.oldPrice = oldPrice;
+        this.newPrice = newPrice;
+        }
+
+}
+public class Demo {
+    public event EventHandler<CustomEvent> PriceChange;
+    int price;
+    public int Price
+    {
+        get { return price; }
+        set
+        {// var e = CustomEvent(price, value); }
+        //PriceChage(e)
+        }
+        }
+    protected void PriceChage(CustomEvent e) {
+        var hanler = e;
+        if (e != null) { //hanler(this, e); 
+        
+        }
     }
 }
