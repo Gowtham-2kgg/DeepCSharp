@@ -11,6 +11,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
+
 //
 using random = System.Random;
 using static System.Console;
@@ -21,11 +22,21 @@ using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Net;
+using System.Net.Sockets;
+#if True
+#elif False
+#else
+#endif
+#warning
 internal class Program
 {
     private static void Main(string[] args)
     {
+//#error
+
         Console.WriteLine("Hello, World!");
     }
 }
@@ -791,6 +802,11 @@ public class CSharpSevenFeatures {
         public void Deconstuct(ref int fn, ref int ln) {
             this.Fn = fn;
            this. Ln = ln;
+            try
+            {
+                throw new GowthamException();
+            }
+            finally { GC.Collect(); }
         }
     }
     public class TupExample {
@@ -801,3 +817,198 @@ public class CSharpSevenFeatures {
     }
 }
 //C# 3.0 have var, linq,anonymous types lambda expression C#4 got optional and reference and dynamic as newly included features c#5 got async and awit c#5 includes string interpolation ? and many such
+//Excceptions
+
+[Serializable]//serializable
+public class GowthamException : Exception {
+    public GowthamException():base("Im excepting an exception") { }
+    public GowthamException(string fileName,int lineNumber):base($"Exception happens because of this {fileName} and in this file at line{lineNumber}") { }
+    string fileName { get; set; }
+    string lineNumber { get; set; }
+    //rethorwing
+    public GowthamException(string fileName, Exception innerExe) : base(fileName, innerExe) { }
+}
+//when u trow ception at catch its called exception anti-patterns
+//Aggregate exception we can throw multiple exception
+public class ExampeForMultipleExe {
+    public void Example()
+    {
+        try
+        {
+            this.GetExe(1, 2);
+        }
+        catch (AggregateException e) { 
+        
+        }
+    }
+    public void GetExe(int a, int b) {
+
+        var exceptions = new List<Exception>();
+        exceptions.Add(new NullReferenceException("this is null"));
+        exceptions.Add(new ArgumentException("arguments is null"));
+        //UnhandledExceptionEventHandler(exceptions);
+        throw new AggregateException(exceptions);
+        try
+        {
+            try { }
+            catch { }
+        }
+        catch { }
+    }
+    //nullrefexe and formatexe
+
+}
+public class ExampleOOfListerners {
+    public void ExampleForListerners(){
+        TextWriterTraceListener textWriterTrace = new TextWriterTraceListener("Filename.txt");
+        //Debug.Listerners.add(textWriterTrace);Debug.WriteLine("hello");textWriterTrace.Flush();
+        ConsoleTraceListener consoleTrace = new ConsoleTraceListener();
+        //Debug.Listernes.add(consoleTrace);
+        int a = int.MaxValue;
+        int b = unchecked(a + 1);//called overflow
+        long h = a + 1;//overflow it must be unchecked(a+1)
+        long jh = a + 1L;//not overflow
+        Console.WriteLine(a + a + 1L);//-1
+        Console.WriteLine(a + 1L+a);//value
+}
+}
+//we know well about JSON
+//lambda expression can be used in event handling also
+[Obsolete]
+public class Lambda:INotifyPropertyChanged {
+
+
+    //getters and setters
+    int po { get { return this.po; } }
+    int h { set { this.h = value; } }
+    int first { get; set; } = 100;
+    delegate int add(int a, int b);
+    delegate string voider();
+    Func<int,int> func = (a) => { return a+1; };
+
+    Action act = () => { Console.Write("hai"); };
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    public void ExampleOfEventHandler() {
+        EventHandler handler = (sender, args) => Console.WriteLine("Email");
+        add kc=(a, b) => (a+b);
+        kc(1, 2);
+        voider c = () => "hi";
+        c();
+        
+
+    }
+}
+//params can be also used in oerloading 
+//Binding list is also a DT
+[System.AttributeUsage(System.AttributeTargets.Method|System.AttributeTargets.Class)]
+
+public class StrucExam:Attribute {
+    public struct Triangle {
+        private int length;
+        internal int height;
+        //protected int breadth;
+        public int breadth;
+        public Triangle(int length, int height, int breadth) {
+            this.length = length;
+            this.height = height;
+            this.breadth = breadth;
+        }
+        public int Area()  { return this.length * this.breadth * this.height; }
+    }
+    Triangle a = new Triangle(1, 1, 1);
+    int area = a.Area();
+    //exception and attributes
+    public void Exception(Exception ex, [CallerMemberName] string callerMemberName = "", [CallerFilePath] string path = "", [CallerLineNumber] int linenp = 1) {
+    //Do logging
+    }
+    public void FunctionForFun() {
+        try { throw new Exception(); }
+        catch (Exception a)
+        {
+            Exception(a);
+        } }
+}
+[DebuggerDisplay("{Id}{Number}")]
+public class AttributeExample : Attribute {
+    public int Id { get; set; }
+    public int Number { get; set; }
+    public int Numeral { get; set; }
+    public void Example() {
+        var atributes = typeof(StrucExam).GetCustomAttributes();
+    }
+}
+//creating custom attribute
+public class NoMethodAttribute : System.Attribute {
+    public NoMethodAttribute() { }
+}
+public class DelegatesExample {
+    public delegate int Square(int a);
+    public delegate Tflag Converter<in Tto, out Tflag>(Tto input) where Tto : new() where Tflag : new();
+    public delegate bool Boller(int input);
+    Predicate<int> pred = s => s.ToString().StartsWith("a");
+    Func<int,bool> preda = s => s.ToString().StartsWith("a");
+    //Action and delegate both are same
+    public void Exaxmple(){
+    Square c=(x) => x* x;
+}
+}
+public class FileIo {
+    public void Example() {
+        string file = System.IO.File.ReadAllText("file");
+        string[] file1 = System.IO.File.ReadAllLines("file");
+        IEnumerable<string> file2 = System.IO.File.ReadLines("file",Encoding.Default);
+        System.IO.File.WriteAllLinesAsync("file",file2);
+        File.Copy("file", "jail");
+        File.Move("file", "NewPlancce");
+        File.Delete("file");
+        var files = Directory.GetFiles("file", ".", SearchOption.AllDirectories);
+    }
+}
+public class Networking {
+
+    public class Tcp {
+
+        public void ExmapleDownloadFile() {
+            using (var webClient = new WebClient()) {
+                webClient.DownloadFile("url", "download path");
+                //webClient.DownloadFileAsync($, "download path");
+                //webClient.DownloadDataCompleted += new AsyncCompletedEventHandler(completed);
+                //webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(ProgressChanged);
+            }
+        }
+    }
+    public class udp {
+        public int Port = 111;
+        public string IpAddr = "192.168.1.141";
+        byte[] data = Encoding.ASCII.GetBytes("hai");
+        public void ExampleOfUdp()
+        {
+            try {
+                using (var client = new UdpClient()) {
+                    IPEndPoint ip = new IPEndPoint(IPAddress.Parse(IpAddr), Port);
+                    client.Connect(ip);
+                    client.Send(data, data.Length);
+                }
+            }
+            catch { }
+
+            using (var udpListerner = new UdpClient(Port)) { 
+            
+            }
+        }
+
+    }
+}
+public class HttpExample {
+    public void Example() {
+        HttpWebRequest httpWebRequest =  HttpWebRequest.CreateHttp("googje");
+        httpWebRequest.Method = "POST";
+        httpWebRequest.ContentType = "*/*";
+        httpWebRequest.AutomaticDecompression = DecompressionMethods.GZip;
+        using (var resp = httpWebRequest.GetResponse()) { 
+        }
+    
+    }
+}
